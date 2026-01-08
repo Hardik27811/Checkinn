@@ -6,9 +6,9 @@ const authRoute = express.Router()
 const jwt = require('jsonwebtoken')
 
 
-authRoute.get("/", (req, res) => {
-    res.send("helo world")
-})
+// authRoute.get("/", (req, res) => {
+//     res.send("helo world")
+// })
 
 
 authRoute.post("/signup",
@@ -78,6 +78,8 @@ authRoute.post('/login',
                     lastName: user.lastName,
                     role : user.role,
                     userImage : user.userImage,
+                    phone : user.phone,
+
                 },
                 process.env.JWT_SECRET
             );

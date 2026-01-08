@@ -11,6 +11,11 @@ const ownerRoute = require('./routes/ownerRoutes')
 const adminRoute = require('./routes/adminRoutes')
 const userRoute = require('./routes/userRoutes')
 const hotelRoute = require('./routes/hotelRoutes')
+const bookingRoute = require ('./routes/bookingRoutes')
+const NewsletterRoute = require('./routes/newsletter.routes')
+
+const PORT = process.env.PORT || 3000;
+
 const cookieParser = require('cookie-parser')
 
 app.use(cookieParser())
@@ -23,6 +28,15 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname,"public")))
 
+
+console.log({
+  authRoute,
+  ownerRoute,
+  adminRoute,
+  userRoute,
+  hotelRoute,
+  bookingRoute
+});
 
 
 
@@ -37,7 +51,15 @@ app.use("/",userRoute)
 
 app.use("/",hotelRoute)
 
-app.listen(3000,()=>{
-    console.log("server connected");
+app.use("/",bookingRoute)
+
+app.use("/",NewsletterRoute)
+
+app.get("/", (req, res) => {
+  res.send("Backend is working 🚀");
+});
+
+app.listen(PORT,()=>{
+    console.log(`Server running on port ${PORT}`);
     
 })
