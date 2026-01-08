@@ -27,11 +27,7 @@ const Sidebar = () => {
                         <p className='md:block hidden text-center'>{item.name}</p>
             </NavLink>
         ))}
-        <div  
-        onClick={()=>{logout();navigate("/login")}}
-        className={`flex items-center py-3 px-4 md:px-8 gap-3 
-                "border-r-4 md:border-r-[6px] cursor-default  text-gray-600 bg-blue-600/10 border-4  ml-5 max-w-fit justify-center  rounded-4xl mt-4 hover:text-red-600 ":
-                    "hover:bg-gray-100/90  text-gray-700"}`}>Logout</div>
+        
     </div>
   )
 }

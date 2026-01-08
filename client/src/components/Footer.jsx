@@ -62,7 +62,7 @@ function Footer() {
           <p className="mt-3 text-sm text-black-500">
             Subscribe to our newsletter for inspiration and special offers.
           </p>
-          <div className="flex items-center mt-4">
+          {/* <div className="flex items-center mt-4">
             <input
               type="text"
               className="bg-white rounded-l border border-gray-300 h-9 px-3 outline-none"
@@ -71,7 +71,7 @@ function Footer() {
             <button className="flex items-center justify-center  bg-gradient-to-r from-[#FF9A9E] via-[#FAD0C4] to-[#FFD1FF] h-9 w-9 aspect-square rounded-r">
               <img src={assets.arrowIcon} alt="arrow-icon" className="w-3.5 invert" />
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 

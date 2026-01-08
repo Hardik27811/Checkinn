@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useUser } from "../context/UserContext";
-import { FaRegUserCircle } from "react-icons/fa";
-import Dropdown from "./Dropdown";
-const BookIcon = () => (
-  <svg className="w-4 h-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
-  </svg>
-);
+
+// const BookIcon = () => (
+//   <svg className="w-4 h-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+//     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
+//   </svg>
+// );
 
 const Navbar = () => {
   const navLinks = [
@@ -18,11 +17,13 @@ const Navbar = () => {
     { name: "About", path: "/about" },
   ];
 
-  const {user,role,} = useUser();
+  const { user, role, logout} = useUser();
+
 
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   // const [username,setUsername]  = useState(user?.firstName)
 
 
@@ -40,27 +41,27 @@ const Navbar = () => {
 
   // console.log(user);
   // console.log(username);
-  
-  
-// console.log(user.firstName);
-console.log(user);
+
+
+  // console.log(user.firstName);
+  // console.log(user);
 
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${
-        isScrolled
-          ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4"
-          : "py-4 md:py-6"
-      }`}
+      className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${isScrolled
+        ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4"
+        : "py-4 md:py-6"
+        }`}
     >
       {/* Logo */}
-      <Link to="/" className="flex">
-      <img src={assets.newlogopic} className="h-9" alt="" />
+      <Link to="/" 
+      className="flex">
+        <img src={assets.newlogopic} className="h-9 " alt="" />
         <img
           src={assets.newlogo}
           alt="logo"
-          className={`h-9 invert ${isScrolled ?   "invert" : "opacity-80"}`}
+          className={`h-9  md:h-7 sm:h-3 invert ${isScrolled ? "invert" : "opacity-80"}`}
         />
       </Link>
 
@@ -70,57 +71,80 @@ console.log(user);
           <Link
             key={i}
             to={link.path}
-            className={`group flex flex-col gap-0.5 ${
-              isScrolled ? "text-gray-700" : "text-white"
-            }`}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className={`group flex flex-col gap-0.5 ${isScrolled ? "text-gray-700" : "text-white"
+              }`}
           >
             {link.name}
             <div
-              className={`${
-                isScrolled ? "bg-gray-700" : "bg-white"
-              } h-0.5 w-0 group-hover:w-full transition-all duration-300`}
+              className={`${isScrolled ? "bg-gray-700" : "bg-white"
+                } h-0.5 w-0 group-hover:w-full transition-all duration-300`}
             />
           </Link>
         ))}
-        {role === 'owner' && 
-        < button
-          onClick={() => navigate("/owner")}
-          className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
-            isScrolled ? "text-black" : "text-white"
-          }`}
-        >
-          Dashboard
-        </button>}
+        {role === 'owner' &&
+          < button
+            onClick={() => navigate("/owner")}
+            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? "text-black" : "text-white"
+              }`}
+          >
+            Dashboard
+          </button>}
       </div>
 
       {/* Desktop Right */}
       <div className="hidden md:flex items-center gap-4">
-        <img
+        {/* <img
           src={assets.searchIcon}
           alt="search"
           className={`${isScrolled && "invert"} h-7 transition-all duration-500`}
-        />
+        /> */}
         {user ? (
-          <div>
-              <div className={` ${!isScrolled ? "flex items-center gap-2 border-2 border-white rounded-full pr-3 pl-1 py-.75 cursor-default" : "text-black flex items-center gap-2 border-2 border-black rounded-full px-3 py-.75 cursor-default"} `}>
-                  <img
-                    src={`${user?.userImage}`}
-                    alt="Profile"
-                    className="w-7 h-7 rounded-full object-cover object-top border border-gray-300"
-                  />
+          <div
+            className="relative"
+            // onMouseEnter={() => setShowDropdown(true)}
+            // onMouseLeave={() => setShowDropdown(false)}
+            onClick={()=> setShowDropdown(prev => !prev)}
+          >
+            {/* Profile Box */}
+            <div className={` ${!isScrolled ? "flex items-center gap-2  w-26 justify-center border-2 border-white rounded-full pr-3 pl-1 py-.75 mr-3 cursor-default" : "text-black flex justify-center items-center  w-26 gap-2 border-2 border-black rounded-full px-3 py-.75 mr-3 cursor-default"} `}>
+              
 
-                <p className={`text-lg  ${!isScrolled ? "text-white " : "text-black"}`}>{user?.firstName}</p>
-              </div>
+              <p className={`text-lg  ${!isScrolled ? "text-white " : "text-black"}`}>{user?.firstName?.charAt(0).toUpperCase()+user?.firstName?.slice(1)}</p>
+            </div>
+            {/* Dropdown */}
+           
+          {showDropdown &&  <div className="
+              absolute right-0  w-32 text-center
+              bg-white shadow-lg rounded-xl py-3
+              border border-gray-200
+              overflow-hidden
+              animate-fade-in
+              mt-2
+            ">
+              <div className="px-4 py-2 -ml-7  hover:bg-gray-100 cursor-pointer gap-2 flex justify-center items-center   "
+               onClick={()=>{navigate("/user-profile");scrollTo(0,0);}}
+              >
+                <img
+                src={`${user?.userImage}`}
+                alt="Profile"
+                className="w-7 h-7 rounded-full object-cover object-top border border-gray-300"
+               
+              />
+                Profile</div>
+              {/* <p className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Settings</p> */}
+              <p onClick={()=>logout()} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
+            </div>}
+         
           </div>
-          
+
         ) : (
           <button
-            onClick={()=>navigate('/login')}
-            className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${
-              isScrolled
-                ? "bg-black text-white hover:bg-gray-800"
-                : "bg-white text-black hover:bg-gray-200"
-            }`}
+            onClick={() => {navigate('/login');scrollTo(0,0)}}
+            className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled
+              ? "bg-black text-white hover:bg-gray-800"
+              : "bg-white text-black hover:bg-gray-200"
+              }`}
           >
             Login
           </button>
@@ -158,17 +182,34 @@ console.log(user);
           </Link>
         ))}
 
+      { user && <div className="
+             
+            ">
+              <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer gap-2 flex justify-center items-center  "
+               onClick={()=>{ navigate("/user-profile");  setIsMenuOpen(false);scrollTo(0,0) }}
+              >
+                <img
+                src={`${user?.userImage}`}
+                alt="Profile"
+                className="-ml-10 w-7 h-7 rounded-full object-cover object-top border border-gray-300"
+               
+              />
+                Profile</div>
+              {/* <p className="px-4 py-2 hover:bg-gray-100 cursor-pointer"  >Settings</p> */}
+              <p onClick={()=>logout()} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
+            </div>}
+
         {user ? (
           <button
-            onClick={() => navigate("/owner")}
-            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all `}
+            onClick={() => {navigate("/owner");scrollTo(0,0)}}
+            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all hidden lg:block `}
           >
             Dashboard
           </button>
         ) : (
           <button
-            onClick={()=> navigate("/login")}
-            className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500"
+            onClick={() => {navigate("/login") ; setIsMenuOpen(false)}}
+            className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500 mx-2"
           >
             Login
           </button>

@@ -5,27 +5,42 @@ import StartRating from '../components/StartRating';
 import axios from 'axios';
 
 function RoomDetails() {
-    const { id } = useParams(null);
+    const { id } = useParams();
 
     const [room, setRoom] = useState(null);
 
-    const [hotel,setHotel]= useState(null);
+
+    const [hotel, setHotel] = useState(null);
     const [mainImage, setMainImage] = useState(room?.roomImages[0]);
     // const [hotel, setHotel] = useState([])
+
+
+
+    const [checkIn, setCheckIn] = useState("");
+    const [checkOut, setCheckOut] = useState("");
+    const [guests, setGuests] = useState(1);
+
+    
 
 
     useEffect(() => {
         try {
             const fetchrooms = async () => {
-                
+
                 const res1 = await axios.get("http://localhost:3000/hotels", {
-                        withCredentials: true
-                    })
+                    withCredentials: true
+                })
                 const hotel = res1.data.hotels;
-                const matchedHotels = await hotel?.find((hotel => hotel.rooms.filter(h=> h._id === id) ))
-                setHotel(matchedHotels)
+                console.log(hotel);
                 
-             
+                const matchedHotel = hotel?.find(
+                        (hotel) => hotel.rooms.includes(id)
+                        );
+                console.log(matchedHotel);
+                
+                setHotel(matchedHotel)
+
+
                 const res = await axios.get('http://localhost:3000/rooms', {
                     withCredentials: true,
                 })
@@ -38,23 +53,64 @@ function RoomDetails() {
             console.error('Error fetching hotel or rooms:', error);
         }
     }, []);
-        useEffect(() => {
+
+
+    
+    useEffect(() => {
         if (room && room.roomImages && room.roomImages.length > 0) {
             setMainImage(room.roomImages[0]);
         }
-        }, [room]);
+    }, [room]);
+
+    // console.log(room?._id);
+    
+    // console.log(hotel?._id);
 
 
+
+    const handleBooking = async (e) => {
+    e.preventDefault();
+
+    try {
+        const res = await axios.post(
+        "http://localhost:3000/book-room",
+        {
+            roomId: room?._id,
+            hotelId: hotel?._id,
+            checkIn,
+            checkOut,
+            guests,
+        },
+        { withCredentials: true }
+        );
+
+        alert("Booking confirmed! Email sent.");
+    } catch (err) {
+        alert(err.response?.data?.message || "Booking failed");
+    }
+    };
+
+    console.log(room);
     console.log(hotel);
+    
+    
+    
+    
+    if (!room || !hotel) {
+    return (
+        <div className="py-32 text-center text-gray-500 h-screen pt-100">
+        Loading room details...
+        </div>
+    );
+    }
 
+    return (
+        <div className='py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32  '>
 
-    return room && (
-        <div className='py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32 '>
-            
             {/* Room Details */}
             <div className='flex flex-col md:flex-row  items-start md:items-center gap-2'>
-                <h1 className='text-3xl md:text-4xl font-playfair'>{hotel.name }
-                    <span className='font-inter text-sm'> ( {room.roomType})</span></h1>
+                <h1 className='text-3xl md:text-4xl font-playfair'>{hotel?.name}
+                    <span className='font-inter text-sm'> ( {room?.roomType})</span></h1>
                 <p
                     className='text-xs font-inter py-1.5 px-3 text-white bg-orange-500 rounded-full'>20% OFF</p>
             </div>
@@ -65,11 +121,7 @@ function RoomDetails() {
                 <p className='ml-2'>200+ Reviews</p>
             </div>
 
-            {/* Room Address  */}
-            {/* <div className='flex items-center gap-1 text-gray-500 mt-2'>
-                <img src={assets.locationIcon} alt="location-icon" />
-                <span>{room.hotel.address}</span>
-            </div> */}
+            
 
             {/* Room Images  */}
 
@@ -110,11 +162,18 @@ function RoomDetails() {
                 {/* Room price */}
                 <p className='text-2xl font-medium'>₹{room.pricePerNight}/Night</p>
             </div>
+
+
             <form className='flex flex-col md:flex-row items-start md:items-center
-        justify-between bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] p-6
-         rounded-xl  mx-auto mt-16  max-w-6xl'>
-                <div className='flex flex-col flex-wrap md:flex-row items-start
-            md:items-center gap-4 md:gap-10 text-gray-500'>
+            justify-between bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] p-6
+            rounded-xl  mx-auto mt-16  max-w-6xl'
+            
+            onSubmit={handleBooking}
+            >
+
+            <div className='flex flex-col flex-wrap md:flex-row items-start
+            md:items-center gap-4 md:gap-10 text-gray-500'
+            >
 
                     <div className='flex flex-col'>
                         <label className='font-medium'
@@ -124,6 +183,7 @@ function RoomDetails() {
                             className='w-full rounded border border-gray-300 px-3 py-2
                 mt-1.5 outline-none'
                             required
+                            onChange={(e) => setCheckIn(e.target.value)}
                         />
                     </div>
                     <div className='w-px h-15 bg-gray-300/70 max-md:hidden'></div>
@@ -135,6 +195,7 @@ function RoomDetails() {
                             className='w-full rounded border border-gray-300 px-3 py-2
                 mt-1.5 outline-none'
                             required
+                            onChange={(e) => setCheckOut(e.target.value)}
                         />
                     </div>
 
@@ -147,13 +208,15 @@ function RoomDetails() {
                             id='gyests' placeholder='guests'
                             className='max-w-20 rounded border border-gray-300 px-3 py-2
                 mt-1.5 outline-none'
+                            onChange={(e) => setGuests(e.target.value)}
                             required
                         />
                     </div>
 
                 </div>
                 <button
-                    className='bg-primary hover:bg-primary-dull active:scale-95
+                    className='bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 
+               hover:from-emerald-600 hover:via-teal-600 hover:to-sky-600 hover:bg-primary-dull active:scale-95
             transition-all text-white rounded-md max-md max-md:w-full
             max-md:mt-6 md:px-25 py-3 md:py-4 text-base cursor-pointer '
                     type='submit'>
@@ -161,6 +224,8 @@ function RoomDetails() {
                     Book Now
                 </button>
             </form>
+
+
             {/* Common Specifications */}
             <div className='mt-25 space-y-4'>
                 {roomCommonData.map((spec, index) => (
@@ -198,8 +263,14 @@ function RoomDetails() {
                         </div>
                     </div>
                 </div>
-                <button className='px-6 py-2.5 mt-4 rounded text-white bg-primary
-            hover:bg-primary-dull transition-all cursor-pointer'>Contact Now</button>
+                <a className='px-6 py-2.5 mt-4 rounded text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 
+               hover:from-emerald-600 hover:via-teal-600 hover:to-sky-600
+            hover:bg-primary-dull transition-all cursor-pointer'
+
+            href={`mailto:${hotel?.ownerId?.email}`}
+            >
+                
+            Contact Now</a>
             </div>
 
         </div>

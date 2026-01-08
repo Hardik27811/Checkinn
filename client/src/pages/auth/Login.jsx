@@ -49,10 +49,10 @@ const Login = () => {
         }
     }    
     return (
-        <div className='bg-gary-200'>
-            <div className="flex flex-col items-center justify-center h-screen  bg-teal-100">
+        <div className='bg-gary-200 pt-10   '>
+            <div className="flex flex-col items-center justify-center h-screen py-20 bg-teal-100">
                 {/* Toggle Buttons */}
-                <div className="flex gap-4 mb-6">
+                <div className="flex gap-4 mb-6 mt-20">
                     <button
                         onClick={() => setState("login")}
                         className={`px-6 py-2 rounded-full font-medium transition ${state === "login"
@@ -64,7 +64,7 @@ const Login = () => {
                     </button>
                     <button
                         onClick={() => { setState("register"); }}
-                        className={`px-6 py-2 rounded-full font-medium transition ${state === "register"
+                        className={`px-6 py-2  rounded-full font-medium transition ${state === "register"
                                 ? "bg-gradient-to-r from-emerald-400 via-teal-400 to-sky-400 text-white"
                                 : "bg-gray-200 text-gray-700"
                             }`}
@@ -75,7 +75,7 @@ const Login = () => {
 
                 {/* Form */}
                 <form
-                    className="sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white"
+            className="w-[90%] max-w-[350px] mx-auto text-center border border-gray-300/60 rounded-2xl px-8 bg-white py-6"
                     onSubmit={(e) => {
                         e.preventDefault();
                         if (state === "register"){ 

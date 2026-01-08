@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { facilityIcons, roomsDummyData } from '../assets/assets'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import StartRating from '../components/StartRating'
 import { assets } from '../assets/assets'
 import axios from 'axios'
+// import { checkout } from '../../../server/routes/hotelRoutes'
 
 const CheckBox = ({ label, selected = false, onChange = () => { } }) => {
     return (
@@ -25,45 +26,165 @@ const RadioButton = ({ label, selected = false, onChange = () => { } }) => {
 
 function AllRooms() {
     const navigate = useNavigate()
+    const { state } = useLocation()
     const [openFilters, setOpenFilters] = useState(false)
-    const roomTypes = [
-        "Single Bed",
-        "Bouble Bed",
-        "Luxury Room",
-        "Family Suite",
-    ];
-    const priceRanges = [
-        "0 to 500",
-        "500 to 1000",
-        "1000 to 2000",
-        "2000 to 3000",
-    ];
-    const sortOptions = [
-        "Price Low to Hight",
-        "Price Hight to Low",
-        "Newest first",
-    ];
-    const [hotel,setHotel] = useState([])
-    useEffect(()=>{
-        try {
-            const fetchHotel = async ()=>{
-                const res = await axios.get("http://localhost:3000/hotels",{
-                    withCredentials : true
-                })
-                setHotel(res.data.hotels)
-            } 
-            fetchHotel();
-        } catch (error) {
-            
-        }
-    },[])
-    console.log(hotel);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const [hotel, setHotel] = useState([])
+    const [filteredHotels, setFilteredHotels] = useState([]);
+    const [selectedPrices, setSelectedPrices] = useState([]);
+    const [sortBy, setSortBy] = useState("");
+    const [selectedLocations, setSelectedLocations] = useState([]);
+    const [availableLocations, setAvailableLocations] = useState([]);
+    const [hotelLocations,setHotelLocations] = useState([]);
+
+    console.log(state);
     
+useEffect(() => {
+  const fetchHotels = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      let res;
+
+      // If user has entered a destination → use search endpoint
+      if (state?.destination) {
+        const payload = {
+          destination: state.destination,
+        };
+
+        // Only add dates if both are provided and valid (not empty strings)
+        if (state.checkIn && state.checkOut) {
+          payload.checkIn = state.checkIn;
+          payload.checkOut = state.checkOut;
+        }
+
+        // Only add guests if it's a valid number > 0
+        if (state.guests && Number(state.guests) > 0) {
+          payload.guests = Number(state.guests);
+        }
+
+        res = await axios.post(
+          "http://localhost:3000/search-hotels",
+          payload,
+          { withCredentials: true }
+        );
+      } else {
+        // No destination → show all hotels (fallback)
+        res = await axios.get(
+          "http://localhost:3000/hotels",
+          { withCredentials: true }
+        );
+      }
+
+      const hotelsData = res.data.hotels || [];
+
+      setHotel(hotelsData);
+      setFilteredHotels(hotelsData);
+
+      // Optional: Show friendly message if no hotels found
+      if (hotelsData.length === 0) {
+        setError(
+          state?.destination
+            ? `No hotels found in ${state.destination}`
+            : "No hotels available at the moment"
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching hotels:", error);
+      setHotel([]);
+      setFilteredHotels([]);
+      setError("Failed to load hotels. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchHotels();
+}, [state]); // Re-run when any part of state changes (destination, dates, guests)
+
+
+
+useEffect(()=>{
+    const fetchHotelLocations = async ()=>{
+        const res = await fetch("http://localhost:3000/hotels") 
+        const result = await res.json();
+        setHotelLocations(result.hotels)
+    }
+    fetchHotelLocations()
+},[])
+console.log(hotelLocations);
+
+    // for locations
+    useEffect(() => {
+        const locations = [...new Set(hotelLocations.map(h => h.location))];
+        setAvailableLocations(locations);
+    }, [hotelLocations]);
+
+    const handleLocationChange = (checked, location) => {
+        if (checked) {
+            setSelectedLocations([...selectedLocations, location]);
+        } else {
+            setSelectedLocations(
+                selectedLocations.filter(loc => loc !== location)
+            );
+        }
+    };
+    //for price
+    const handlePriceChange = (checked, label) => {
+        if (checked) {
+            setSelectedPrices([...selectedPrices, label]);
+        } else {
+            setSelectedPrices(selectedPrices.filter(p => p !== label));
+        }
+    };
+
+    useEffect(() => {
+        let tempHotels = [...hotel];
+         if (selectedLocations.length > 0) {
+            tempHotels = tempHotels.filter(h =>
+            selectedLocations.includes(h.location)
+            );
+        }
+        if (selectedPrices.length > 0) {
+            tempHotels = tempHotels.filter(hotel =>
+                selectedPrices.some(range => {
+                    const [min, max] = range
+                        .replace("₹", "")
+                        .split("to")
+                        .map(Number);
+
+                    return hotel.price >= min && hotel.price <= max;
+                })
+            );
+        }
+
+        setFilteredHotels(tempHotels);
+    }, [selectedLocations,selectedPrices, hotel]);
+    // for sorting
+    useEffect(() => {
+        let tempHotels = [...filteredHotels];
+
+        if (sortBy === "Price Low to Hight") {
+            tempHotels.sort((a, b) => a.price - b.price);
+        }
+
+        if (sortBy === "Price Hight to Low") {
+            tempHotels.sort((a, b) => b.price - a.price);
+        }
+
+        setFilteredHotels(tempHotels);
+    }, [sortBy]);
+
+    // console.log(hotel);
+
 
 
     return (
-        <div className='flex flex-col-reverse  lg:flex-row items-start justify-between pt-28 md:pt-35 px-4 
-    md:px-16 lg:px-24 xl:px-32'>
+        <div className='flex flex-col-reverse  lg:flex-row items-start justify-between pt-28 md:pt-35 px-4  
+        md:px-16 lg:px-24 xl:px-32'>
             <div>
                 <div className='flex flex-col items-start text-left'>
                     <h1 className='font-playfair text-4xl md:text-[40px]'>Hotel Rooms</h1>
@@ -71,9 +192,18 @@ function AllRooms() {
                         limited-time offers and special packages to enhance your stay nd create<br /> unforgettable memories.
                     </p>
                 </div>
-                { hotel.length>0 && hotel.map((hot) => (
+                {loading && <p>Loading hotels...</p>}
+                {!loading && error && (
+                    <p className="text-center text-red-500 mt-10">{error}</p>
+                )}
+                {!loading && filteredHotels.length === 0 && !error && (
+                    <p className="text-center text-gray-500 mt-10">
+                        No hotels matching your filters
+                    </p>
+                )}
+                {filteredHotels.length > 0 && filteredHotels.map((hot) => (
                     <div key={hot?._id} className='flex flex-col md:flex-row items-start 
-                py-10 gap-6 border-b border-gray-300 last:pb-30 last:border-0'>
+                py-10 gap-6 border-b border-gray-300  px-5 last:pb-30 last:border-0 '>
                         <img
                             onClick={() => { navigate(`/hotelrooms/${hot?._id}`); scrollTo(0, 0) }}
                             src={hot?.hotelImage[0]} alt="hotel=img" title='View Room Details'
@@ -91,38 +221,17 @@ function AllRooms() {
                                 <img src={assets.locationIcon} alt="location-icon" />
                                 <span>{hot?.location}</span>
                             </div>
-                            
-                            {/* <div className='flex flex-wrap items-center mt-3 mb-6 gap-4'>
-                                {hot.amenities.map((item, index) => (
-                                    <div key={index} className='flex items-center gap-2
-                            px-3 py-2 rounded-lg bg-[#F5F5FF]/70'>
-                                        <img src={facilityIcons[item]} alt={item}
-                                            className='w-5 h-5' />
-                                        <p className='text-xs'>{item}</p>
-                                    </div>
-                                ))}
-                            </div> */}
+
                            
-                            {/* <p className='text-xl font-medium text-gray-700'>₹{hot.price} /night</p>` */}
                         </div>
                     </div>
                 ))}
 
             </div>
 
-            {/* <div className='bg-white w-80 border border-gray-300 text-gray-600
-            max-lg:mb-8 min-lg:mt-16'>
-            <div className={ `flex items-center justify-between px-5 py-2.5 min-lg:border-b border-gray-300 ${openFilters && "border-b"}`}>
-                <p className='text-base font-medium text-gray-800'>FILTERS</p>
-                <div className='text-xs cursor-pointer'>
-                    <span onClick={()=>setOpenFilters(!openFilters)} className='lg:hidden' >
-                        {openFilters ? 'HIDE' : 'SHOW'}
-                    </span>
-                    <span className='hidden lg:block'>CLEAR</span>
-                </div>
-            </div>
-            <div className={`${openFilters ? 'h-auto' : "h-0 lg:h-auto"} overflow-hidden transition-all duration-700`}> */}
-            <div className='bg-white w-80 border border-gray-300 text-gray-600 max-lg:mb-8 lg:mt-16'>
+           
+            <div className={`${openFilters ? 'h-auto' : "h-0 lg:h-auto"} overflow-hidden transition-all duration-700`}> 
+            <div className='bg-white w-80 border rounded-md border-gray-300 text-gray-600 max-lg:mb-8 lg:mt-16'>
                 <div className={`flex items-center justify-between px-5 py-2.5 lg:border-b border-gray-300 ${openFilters && "border-b"}`}>
                     <p className='text-base font-medium text-gray-800'>FILTERS</p>
                     <div className='text-xs cursor-pointer'>
@@ -132,30 +241,48 @@ function AllRooms() {
                         <span className='hidden lg:block'>CLEAR</span>
                     </div>
                 </div>
-                <div className={`${openFilters ? 'h-auto' : "h-0 lg:h-auto"} overflow-hidden transition-all duration-700`}>
+                <div className={`${openFilters ? 'h-auto' : "h-0 lg:h-auto"} overflow-hidden transition-all duration-700 pb-5`}>
+                 
                     <div className='px-5 pt-5'>
-                        <p className='font-medium text-gray-800 pb-2'>Popular filters</p>
-                        {roomTypes.map((room, index) => (
-                            <CheckBox key={index} label={room} />
-                        ))}
+                    <p className='font-medium text-gray-800 pb-2'>Location</p>
+
+                    {availableLocations.map((loc, index) => (
+                        <CheckBox
+                        key={index}
+                        label={loc}
+                        selected={selectedLocations.includes(loc)}
+                        onChange={handleLocationChange}
+                        />
+                    ))}
                     </div>
-                    <div className='px-5 pt-5'>
+                    {/* <div className='px-5 pt-5'>
                         <p className='font-medium text-gray-800 pb-2'>Price Range</p>
                         {priceRanges.map((range, index) => (
-                            <CheckBox key={index} label={`₹ ${range}`} />
+                            <CheckBox
+                                key={index}
+                                label={`₹ ${range}`}
+                                selected={selectedPrices.includes(`₹ ${range}`)}
+                                onChange={handlePriceChange}
+                            />
                         ))}
                     </div>
                     <div className='px-5 pt-5 pb-7'>
                         <p className='font-medium text-gray-800 pb-2'>Sort By</p>
                         {sortOptions.map((option, index) => (
-                            <RadioButton key={index} label={option} />
+                            <RadioButton
+                                key={index}
+                                label={option}
+                                selected={sortBy === option}
+                                onChange={setSortBy}
+                            />
                         ))}
-                    </div>
+                    </div> */}
                 </div>
 
 
             </div>
         </div>
+    </div>
     )
 }
 

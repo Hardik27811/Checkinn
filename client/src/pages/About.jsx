@@ -1,16 +1,17 @@
 import React from "react";
 import { Building2, Star, Smartphone, Headphones, BadgeDollarSign } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 const About = () => {
+  const navigate = useNavigate();
   return (
-    <section className="bg-gray-50 py-16 px-6 md:px-20">
+    <section className="bg-gray-50 py-16 px-6 md:px-20 mt-20">
       {/* Heading */}
       <div className="text-center max-w-3xl mx-auto mb-12 mt-30">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-          About <span className="text-gray-900">QuickStay</span>
+          About <span className="text-gray-900">CheckInn</span>
         </h2>
         <p className="text-gray-600 text-lg">
-          Welcome to <span className="font-semibold text-gray-800">QuickStay</span>, 
+          Welcome to <span className="font-semibold text-gray-800">CheckInn</span>, 
           your one-stop hotel booking platform designed to make travel simple and affordable. 
           From budget stays to luxury hotels, we bring you a wide range of accommodation 
           options at unbeatable prices.
@@ -46,7 +47,9 @@ const About = () => {
 
       {/* Bottom CTA */}
       <div className="text-center mt-12 mb-16">
-        <button className="bg-gray-900 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow hover:bg-gray-500 transition">
+        <button className="bg-gray-900 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow hover:bg-gray-500 transition"
+        onClick={()=>{navigate("/rooms");scrollTo(0,0)}}
+        >
           Start Booking Now
         </button>
       </div>

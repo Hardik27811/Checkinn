@@ -63,7 +63,7 @@ function Testimonial() {
   ]
 
   return (
-    <div className="flex flex-col items-center px-6 md:px-16 lg:px-24  pt-20 pb-32 bg-gradient-to-t from-emerald-100 to-white ">
+    <div className="flex flex-col items-center px-6 md:px-16 lg:px-24 mt-20  pt-20 pb-32 bg-gradient-to-t from-emerald-100 to-white ">
       <Title 
         title="What Our Guests Say" 
         subTitle="Hear from travelers who made memories with QuickStay. Their stories reflect the comfort, luxury, and care that define our stays." 

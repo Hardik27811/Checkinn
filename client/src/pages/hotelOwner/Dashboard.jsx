@@ -8,6 +8,7 @@ import { useDropzone } from "react-dropzone";
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(dashboardDummyData);
   const [hotelInfo, setHotelInfo] = useState([]);
+  const [bookings,setBookings]= useState([])
 
 
 
@@ -15,7 +16,7 @@ const Dashboard = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: { "image/*": [] },
     onDrop: (acceptedFile) => {
-      setFiles(acceptedFile.map((file) => 
+      setFiles(acceptedFile.map((file) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ))
     }
@@ -37,6 +38,12 @@ const Dashboard = () => {
           withCredentials: true,
         });
         setHotelInfo(res.data);
+
+
+        const fetchBooking = await axios.get("http://localhost:3000/booking",{withCredentials:true})
+        setBookings(fetchBooking.data.bookings)
+
+
         // setHotelId(res.data[0]?._id);
       } catch (err) {
         console.error(err);
@@ -74,7 +81,7 @@ const Dashboard = () => {
 
       const res = await axios.post(
         "http://localhost:3000/owner/add-hotel",
-        newFormData, // 👇 Use the new FormData instance
+        newFormData,
         {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
@@ -99,6 +106,9 @@ const Dashboard = () => {
       alert("Error adding hotel. Please try again.");
     }
   };
+
+  console.log(bookings);
+  
 
   return (
     <div className="p-6  overflow-scroll ">

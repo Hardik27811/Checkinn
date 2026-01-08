@@ -6,7 +6,11 @@ import {BrowserRouter} from 'react-router-dom' // used for diff page navigation 
 import {UserProvider} from './context/UserContext.jsx'
 
 
-
+if (import.meta.env.PROD) {
+  console.log = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+}
 
 
 createRoot(document.getElementById('root')).render(

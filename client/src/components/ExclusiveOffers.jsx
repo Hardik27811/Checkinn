@@ -1,31 +1,28 @@
 import React from 'react'
 import { assets, exclusiveOffers } from '../assets/assets'
+import ExclusiveOffersPage from '../pages/ExclusiveOffersPage'
+import { useNavigate } from 'react-router-dom'
 import Title from './Title'
 
 function ExclusiveOffers() {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center px-6 md:px-16 lg:px-24 xl:px-32 pt-20 pb-30 relative bg-gradient-to-b from-emerald-50 to-white ">
 
       {/* Section Heading */}
       <div className="flex flex-col md:flex-row items-center justify-between w-full relative z-10">
-        <Title 
+       
+       <Title 
           align="left" 
           title=" Exclusive Offers" 
           subTitle="Don’t miss out on our limited-time deals and curated packages to make your stay even more unforgettable." 
           className="text-white"
         />
-        <button className="group flex items-center gap-2 font-semibold text-white cursor-pointer max-md:mt-12">
-          View all Offers 
-          <img 
-            src={assets.arrowIcon} 
-            alt="arrow-icon" 
-            className="group-hover:translate-x-1 transition-all invert" 
-          />
-        </button>
       </div>
 
       {/* Offers Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 relative z-10">
+        
         {exclusiveOffers.map((item) => (
           <div 
             key={item._id} 
@@ -52,7 +49,9 @@ function ExclusiveOffers() {
               <button className="mt-4 flex items-center gap-2 font-semibold px-4 py-2 rounded-lg 
                 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 
                 hover:from-emerald-600 hover:via-teal-600 hover:to-sky-600 
-                transition-all shadow-lg w-max text-white">
+                transition-all shadow-lg w-max text-white"
+                onClick={()=>{navigate('/ExclusiveOffersPage');scrollTo(0,0)}}
+                >
                 View Offers
                 <img 
                   className="invert group-hover:translate-x-1 transition-all" 

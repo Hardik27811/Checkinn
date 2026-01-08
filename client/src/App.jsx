@@ -13,10 +13,12 @@ import Addroom from './pages/hotelOwner/AddRoom'
 import ListRoom from './pages/hotelOwner/ListRoom'
 import Experience from './pages/Experience'
 import About from './pages/About'
-import Signup from './pages/auth/signup'
+
 import Login from './pages/auth/Login'
 import AdminLayout from './pages/admin/AdminLayout'
 import HotelRoomsPage from './pages/HotelRoomsPage'
+import UserProfile from './pages/UserProfile'
+import ExclusiveOffersPage from './pages/ExclusiveOffersPage'
 
 function App() {
 
@@ -35,8 +37,10 @@ function App() {
               <Route path='/hotelrooms/:id' element={<HotelRoomsPage/>} />
               <Route path='/rooms/:id' element={<RoomDetails/>}/>
               <Route path='/my-bookings' element={<MyBookings/>}/>
+              <Route path='/user-profile' element={<UserProfile/>}/>
               <Route path='/experience' element={<Experience/>}/>
               <Route path='/about' element={<About/>}/>
+              <Route path='/exclusiveOffersPage' element={<ExclusiveOffersPage/>}/>
               <Route path='/login' element={<Login/>} />
               <Route path='/owner' element={<Layout/>}>
                 <Route index element={<Dashboard/>} />

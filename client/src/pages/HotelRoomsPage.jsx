@@ -48,7 +48,7 @@ const HotelRoomsPage = () => {
   
 
   return (
-    <div className="mt-34 mb-20 px-20" >
+    <div className="mt-34 mb-20 px-10 " >
       <div className="mb-10 text-center">
         <h1 className="text-3xl font-bold mb-2">{hotel.name}</h1>
         <p className="text-gray-600">{hotel.location}</p>
@@ -70,7 +70,7 @@ const HotelRoomsPage = () => {
             <div
               key={room._id}
               className="border-none rounded-2xl shadow hover:shadow-2xl transition duration-200 overflow-hidden"
-              onClick={()=>navigate(`/rooms/${room._id}`)}
+              onClick={()=>{navigate(`/rooms/${room._id}`);scrollTo(0,0)}}
 
             >
               <img
