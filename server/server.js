@@ -1,70 +1,71 @@
-const dotenv = require('dotenv')
-dotenv.config()
-const express = require('express')
-const connectTodb = require('./config/db')
-connectTodb()
-const cors = require('cors')
-const path = require('path')
-const app = express()
-const authRoute = require("./routes/authRoutes")
-const ownerRoute = require('./routes/ownerRoutes')
-const adminRoute = require('./routes/adminRoutes')
-const userRoute = require('./routes/userRoutes')
-const hotelRoute = require('./routes/hotelRoutes')
-const bookingRoute = require ('./routes/bookingRoutes')
-const NewsletterRoute = require('./routes/newsletter.routes')
+const dotenv = require('dotenv');
+dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 
-const cookieParser = require('cookie-parser')
+const connectToDB = require('./config/db');
 
-app.use(cookieParser())
+// Routes
+const authRoute = require("./routes/authRoutes");
+const ownerRoute = require('./routes/ownerRoutes');
+const adminRoute = require('./routes/adminRoutes');
+const userRoute = require('./routes/userRoutes');
+const hotelRoute = require('./routes/hotelRoutes');
+const bookingRoute = require('./routes/bookingRoutes');
+const newsletterRoute = require('./routes/newsletter.routes');
+
+const app = express();
+
+// ================== DATABASE ==================
+connectToDB();
+
+// ================== MIDDLEWARE ==================
+app.use(cookieParser());
+
 app.use(cors({
-    origin: "*", 
-    credentials: true,
-}),
-)
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(express.static(path.join(__dirname,"public")))
+  origin: "*",
+  credentials: true
+}));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-console.log({
-  authRoute,
-  ownerRoute,
-  adminRoute,
-  userRoute,
-  hotelRoute,
-  bookingRoute
-});
+app.use(express.static(path.join(__dirname, "public")));
 
-
-
-
-app.use("/auth/user",authRoute)
-
-app.use("/owner",ownerRoute)
-
-app.use("/admin",adminRoute)
-
-app.use("/",userRoute)
-
-app.use("/",hotelRoute)
-
-app.use("/",bookingRoute)
-
-app.use("/",NewsletterRoute)
-
-app.get("/", (req, res) => {
-  res.send("Backend is working 🚀");
-});
-
+// ================== HEALTH CHECK (IMPORTANT) ==================
 app.get("/healthCheck", (req, res) => {
   res.status(200).send("OK");
 });
 
+// ================== ROOT TEST ==================
+app.get("/", (req, res) => {
+  res.send("Backend is working 🚀");
+});
 
-app.listen(PORT,()=>{
-    console.log(`Server running on port ${PORT}`);
-    
-})
+// ================== ROUTES ==================
+app.use("/auth/user", authRoute);
+app.use("/owner", ownerRoute);
+app.use("/admin", adminRoute);
+
+app.use("/users", userRoute);
+app.use("/hotels", hotelRoute);
+app.use("/bookings", bookingRoute);
+app.use("/newsletter", newsletterRoute);
+
+// ================== 404 HANDLER ==================
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found"
+  });
+});
+
+// ================== SERVER ==================
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
