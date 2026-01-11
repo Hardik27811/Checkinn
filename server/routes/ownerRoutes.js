@@ -24,12 +24,12 @@ route.post('/add-hotel', verifyToken, isOwner, upload.array('images',10) , async
         const { name, location, description, pricePerNight, roomsAvailable } = req.body
         const uploadPromises = req.files.map(file => uplaodOnCloudinary(file.path));
         const uploadedResponses = await Promise.all(uploadPromises);
-        console.log(r̀);
+        // console.log(r̀);
         
         const imageurl = uploadedResponses.map(r =>r.url)
 
         const user = await userModel.findById(req.user.userId);
-        if (user.hotels.length>0) return res.status(401).json({message :"hotel already added"})
+        if (user.hotels.length>0) return res.status(409).json({message :"hotel already added"})
         const hotel = await hotelModels.create({
             name,
             location,
@@ -43,7 +43,7 @@ route.post('/add-hotel', verifyToken, isOwner, upload.array('images',10) , async
 
 
         await user.save();
-       ``
+    
         res.status(201).json({
             message: "Hotel added successfully", hotel
         })

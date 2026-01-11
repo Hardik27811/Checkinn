@@ -71,27 +71,7 @@ route.get("/booking", verifyToken, async (req, res) => {
 
 module.exports = route;
 
-// route.get("/owner/booking",verifyToken,isOwner,async(req,res)=>{
-//   try {
-//     const hotel = await Hotel.find({ownerId : req.user.userId})
-//     const booking = await Booking.find({hotel : hotel._id})
 
-//     console.log(hotel );
-//     console.log(booking);
-    
-    
-
-//     res.status(200).json({
-//       sucess :true,
-//       count : booking.length,
-//       booking
-//     })
-//   } catch (error) {
-//     onsole.error("Get bookings error:", error);
-//     res.status(500).json({ message: "Failed to fetch bookings" });
-    
-//   }
-// })
 
 route.get("/owner/booking", verifyToken, isOwner, async (req, res) => {
   try {
