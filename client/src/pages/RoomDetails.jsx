@@ -41,7 +41,7 @@ function RoomDetails() {
                 setHotel(matchedHotel)
 
 
-                const res = await axios.get('https://checkinn-rh1m.onrender.com/rooms', {
+                const res = await axios.get('https://checkinn-rh1m.onrender.com/hotels/rooms', {
                     withCredentials: true,
                 })
                 const allRooms = res.data.rooms;

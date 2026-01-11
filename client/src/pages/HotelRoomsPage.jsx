@@ -21,7 +21,7 @@ const HotelRoomsPage = () => {
         setHotel(selectedHotel);
 
    
-        const roomsRes = await axios.get('https://checkinn-rh1m.onrender.com/rooms', {
+        const roomsRes = await axios.get('https://checkinn-rh1m.onrender.com/hotels/rooms', {
           withCredentials: true,
         });
         console.log(roomsRes);
