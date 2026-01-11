@@ -26,7 +26,7 @@ connectToDB();
 app.use(cookieParser());
 
 app.use(cors({
-  origin: "*",
+  origin: ["*","https://peppy-beijinho-3cb979.netlify.app/"],
   credentials: true
 }));
 
@@ -42,7 +42,7 @@ app.get("/healthCheck", (req, res) => {
 
 // ================== ROOT TEST ==================
 app.get("/", (req, res) => {
-  res.send("Backend is working 🚀");
+  res.send("Backend is working ");
 });
 
 // ================== ROUTES ==================
@@ -67,5 +67,5 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
