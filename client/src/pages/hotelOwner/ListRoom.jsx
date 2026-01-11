@@ -12,7 +12,7 @@ const ListRoom = () => {
   useEffect(() => {
     const hotelDetail = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/owner/dashboard", {
+        const res = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
           withCredentials: true,
         });
         setHotelInfo(res.data);

@@ -34,15 +34,19 @@ const Dashboard = () => {
   useEffect(() => {
     const hotelDetail = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/owner/dashboard", {
+        const bookingsRes = await axios.get("https://checkinn-rh1m.onrender.com/booking", {
+          withCredentials: true,
+        });
+        console.log(bookingsRes.data.bookings );
+        
+        setBookings(bookingsRes.data.bookings || []);
+        const res = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
           withCredentials: true,
         });
         setHotelInfo(res.data);
 
 
-        const fetchBooking = await axios.get("http://localhost:3000/booking",{withCredentials:true})
-        setBookings(fetchBooking.data.bookings)
-
+  
 
         // setHotelId(res.data[0]?._id);
       } catch (err) {
@@ -54,6 +58,7 @@ const Dashboard = () => {
   // useEffect(()=>{
   //   setRoomsData(hotelInfo[0]?.rooms);
   // },[setRoomsData])
+
 
 
   const handleChange = (e) => {
@@ -80,7 +85,7 @@ const Dashboard = () => {
       });
 
       const res = await axios.post(
-        "http://localhost:3000/owner/add-hotel",
+        "https://checkinn-rh1m.onrender.com/owner/add-hotel",
         newFormData,
         {
           withCredentials: true,
@@ -96,7 +101,7 @@ const Dashboard = () => {
         roomsAvailable: "",
       });
       // Refresh hotel data
-      const updated = await axios.get("http://localhost:3000/owner/dashboard", {
+      const updated = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
         withCredentials: true,
       });
       setHotelInfo(updated.data);
@@ -107,7 +112,7 @@ const Dashboard = () => {
     }
   };
 
-  console.log(bookings);
+  
   
 
   return (

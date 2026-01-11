@@ -15,7 +15,7 @@ const AdminLayout = () => {
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/admin/admin-details", {
+        const res = await axios.get("https://checkinn-rh1m.onrender.com/admin/admin-details", {
           withCredentials: true,
         });
         if (res) setAdmin(res.data[0]);
@@ -35,7 +35,7 @@ const AdminLayout = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3000/admin/add-owner",
+        "https://checkinn-rh1m.onrender.com/admin/add-owner",
         formData,
         { withCredentials: true }
       );

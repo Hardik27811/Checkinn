@@ -22,7 +22,7 @@ const Login = () => {
   
     const userSignup = async () => {
         try {
-            const res = await axios.post("http://localhost:3000/auth/user/signup", { firstName, lastName, email, password, phone })
+            const res = await axios.post("https://checkinn-rh1m.onrender.com/auth/user/signup", { firstName, lastName, email, password, phone })
             if (res.status === 200) {
                 console.log("User registered", res);
                 
@@ -33,7 +33,7 @@ const Login = () => {
     }
     const userLogin = async ()=>{
         try {
-            const res = await axios.post("http://localhost:3000/auth/user/login",{email,password},{ withCredentials: true }  )
+            const res = await axios.post("https://checkinn-rh1m.onrender.com/auth/user/login",{email,password},{ withCredentials: true }  )
             if(res.status   === 200){
                 console.log("User login",res);
 

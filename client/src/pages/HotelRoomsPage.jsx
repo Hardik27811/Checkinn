@@ -13,7 +13,7 @@ const HotelRoomsPage = () => {
     const fetchHotelAndRooms = async () => {
       try {
        
-        const hotelRes = await axios.get('http://localhost:3000/hotels', {
+        const hotelRes = await axios.get('https://checkinn-rh1m.onrender.com/hotels', {
           withCredentials: true,
         });
         const hotels = hotelRes.data.hotels;
@@ -21,7 +21,7 @@ const HotelRoomsPage = () => {
         setHotel(selectedHotel);
 
    
-        const roomsRes = await axios.get('http://localhost:3000/rooms', {
+        const roomsRes = await axios.get('https://checkinn-rh1m.onrender.com/rooms', {
           withCredentials: true,
         });
         console.log(roomsRes);

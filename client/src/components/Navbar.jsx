@@ -133,7 +133,7 @@ const Navbar = () => {
               />
                 Profile</div>
               {/* <p className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Settings</p> */}
-              <p onClick={()=>logout()} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
+              <p onClick={()=>{logout(); navigate("/")}} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
             </div>}
          
           </div>

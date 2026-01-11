@@ -21,7 +21,7 @@ function NewsLetter() {
       setMessage(null);
       console.log(email);
       
-      const res = await fetch("http://localhost:3000/subscribe",{
+      const res = await fetch("https://checkinn-rh1m.onrender.com/subscribe",{
         credentials: 'include',
         method : "POST",
         headers: { "Content-Type": "application/json" },

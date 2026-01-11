@@ -6,8 +6,8 @@ import { useUser } from "../context/UserContext";
 
 const UserProfile = () => {
 
-    const { user, role, logout} = useUser();
-//   const [user, setUser] = useState(null);
+  const { user, role, logout } = useUser();
+  //   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -19,29 +19,20 @@ const UserProfile = () => {
   console.log(user);
   const timestamp = user?.iat;
   const date = new Date(timestamp * 1000);
-const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'"); 
+  const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        // Fetch user data
-        // const userRes = await axios.get("http://localhost:3000/api/user/profile", {
-        //   withCredentials: true,
-        // });
-        // setUser(userRes.data.user);
-        // setFormData({
-        //   name: userRes.data.user.name || "",
-        //   email: userRes.data.user.email || "",
-        //   phone: userRes.data.user.phone || "",
-        // });
+       
 
         // Fetch users bookings
-        const bookingsRes = await axios.get("http://localhost:3000/booking", {
+        const bookingsRes = await axios.get("https://checkinn-rh1m.onrender.com/booking", {
           withCredentials: true,
         });
         setBookings(bookingsRes.data.bookings || []);
 
-        
+
       } catch (error) {
         console.error("Error fetching profile:", error);
       } finally {
@@ -53,7 +44,7 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
   }, []);
 
   console.log(bookings);
-  
+
 
 
 
@@ -62,7 +53,7 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
   const handleSave = async () => {
     try {
       await axios.put(
-        "http://localhost:3000/api/user/profile",
+        "https://checkinn-rh1m.onrender.com/api/user/profile",
         formData,
         { withCredentials: true }
       );
@@ -106,9 +97,9 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex flex-col items-center">
                 <div className="w-32 h-32 bg-indigo-100 rounded-full flex items-center justify-center text-4xl font-bold text-indigo-600 mb-4">
-                 <img src={`${user.userImage}`} alt="" /> 
+                  <img src={`${user.userImage}`} alt="" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-900">{user.firstName.charAt(0).toUpperCase()+user.firstName.slice(1) || "Guest User"}</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">{user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1) || "Guest User"}</h2>
                 <p className="text-gray-600 mt-1">{user.email}</p>
 
                 <button
@@ -127,7 +118,7 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
                       {formatted}
                     </p>
                   </div>
-                {role === 'user' &&  <div>
+                  {role === 'user' && <div>
                     <p className="text-sm text-gray-500">Total Bookings</p>
                     <p className="text-2xl font-bold text-indigo-600">{bookings.length}</p>
                   </div>}
@@ -184,7 +175,7 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm text-gray-500">Full Name</p>
-                    <p className="font-medium">{user.firstName.charAt(0).toUpperCase()+user.firstName.slice(1) +" "+ user.lastName.charAt(0).toUpperCase()+user.lastName.slice(1)|| "Not provided"}</p>
+                    <p className="font-medium">{user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1) + " " + user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1) || "Not provided"}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
@@ -199,7 +190,7 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
             </div>
 
             {/* Booking History */}
-           { role === 'user' && <div className="bg-white rounded-xl shadow-sm p-6">
+            {role === 'user' && <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="text-xl font-semibold mb-4">Booking History</h3>
               {bookings.length === 0 ? (
                 <p className="text-gray-500 text-center py-8">No bookings yet. Start exploring hotels!</p>
@@ -217,13 +208,12 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
                         </div>
                         <div className="text-right">
                           <span
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              booking.status === "confirmed"
+                            className={`px-3 py-1 rounded-full text-sm font-medium ${booking.status === "confirmed"
                                 ? "bg-green-100 text-green-800"
                                 : booking.status === "cancelled"
-                                ? "bg-red-100 text-red-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                              }`}
                           >
                             {booking.status?.charAt(0).toUpperCase() + booking.status?.slice(1)}
                           </span>
@@ -247,8 +237,8 @@ const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
                           <p className="font-medium">{booking.guests}</p>
                         </div>
                         <div>
-                          <p className="text-gray-500">Total Paid</p>
-                          <p className="font-medium text-indigo-600">₹{booking.totalPrice}</p>
+                          <p className="text-gray-500">Payment</p>
+                          <p className="font-medium text-indigo-600">On Arrival</p>
                         </div>
                       </div>
                     </div>

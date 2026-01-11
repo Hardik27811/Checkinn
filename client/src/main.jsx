@@ -14,9 +14,11 @@ if (import.meta.env.PROD) {
 
 
 createRoot(document.getElementById('root')).render(
-  <UserProvider>
+  
   <BrowserRouter>
+  <UserProvider>
     <App />
+   </UserProvider>
   </BrowserRouter>
- </UserProvider>
+
 )

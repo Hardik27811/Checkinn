@@ -45,7 +45,7 @@ const AddRoom = () => {
   useEffect(() => {
     const fetchHotel = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/owner/dashboard", {
+        const res = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
           withCredentials: true,
         });
         if (res.data.length > 0) {
@@ -82,7 +82,7 @@ const AddRoom = () => {
       files.forEach((file) => formData.append("images", file));
 
       const res = await axios.post(
-        `http://localhost:3000/owner/add-room/${hotelId}`,
+        `https://checkinn-rh1m.onrender.com/owner/add-room/${hotelId}`,
         formData,
         {
           withCredentials: true,

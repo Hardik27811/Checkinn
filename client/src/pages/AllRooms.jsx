@@ -67,14 +67,14 @@ useEffect(() => {
         }
 
         res = await axios.post(
-          "http://localhost:3000/search-hotels",
+          "https://checkinn-rh1m.onrender.com/search-hotels",
           payload,
           { withCredentials: true }
         );
       } else {
         // No destination → show all hotels (fallback)
         res = await axios.get(
-          "http://localhost:3000/hotels",
+          "https://checkinn-rh1m.onrender.com/hotels",
           { withCredentials: true }
         );
       }
@@ -109,7 +109,7 @@ useEffect(() => {
 
 useEffect(()=>{
     const fetchHotelLocations = async ()=>{
-        const res = await fetch("http://localhost:3000/hotels") 
+        const res = await fetch("https://checkinn-rh1m.onrender.com/hotels") 
         const result = await res.json();
         setHotelLocations(result.hotels)
     }

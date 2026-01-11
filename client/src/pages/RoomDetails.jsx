@@ -27,7 +27,7 @@ function RoomDetails() {
         try {
             const fetchrooms = async () => {
 
-                const res1 = await axios.get("http://localhost:3000/hotels", {
+                const res1 = await axios.get("https://checkinn-rh1m.onrender.com/hotels", {
                     withCredentials: true
                 })
                 const hotel = res1.data.hotels;
@@ -41,7 +41,7 @@ function RoomDetails() {
                 setHotel(matchedHotel)
 
 
-                const res = await axios.get('http://localhost:3000/rooms', {
+                const res = await axios.get('https://checkinn-rh1m.onrender.com/rooms', {
                     withCredentials: true,
                 })
                 const allRooms = res.data.rooms;
@@ -73,7 +73,7 @@ function RoomDetails() {
 
     try {
         const res = await axios.post(
-        "http://localhost:3000/book-room",
+        "https://checkinn-rh1m.onrender.com/book-room",
         {
             roomId: room?._id,
             hotelId: hotel?._id,
