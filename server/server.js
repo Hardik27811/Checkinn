@@ -25,8 +25,13 @@ connectToDB();
 // ================== MIDDLEWARE ==================
 app.use(cookieParser());
 
+const allowedOrigins = [
+  "https://peppy-beijinho-3cb979.netlify.app",
+  "http://localhost:3000"
+];
+
 app.use(cors({
-  origin: ["*","https://peppy-beijinho-3cb979.netlify.app/"],
+  origin: allowedOrigins,
   credentials: true
 }));
 
