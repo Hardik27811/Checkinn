@@ -39,7 +39,7 @@ function Hero() {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const res = await fetch("https://checkinn-rh1m.onrender.com/hotels")
+        const res = await fetch("https://checkinn-rh1m.onrender.com/hotels/hotels")
         const result = await res.json();
         setHotel(result.hotels)
       } catch (error) {

@@ -56,7 +56,7 @@ app.use("/owner", ownerRoute);
 app.use("/admin", adminRoute);
 
 app.use("/users", userRoute);
-app.use("/hotels", hotelRoute);
+app.use("/hotel", hotelRoute);
 app.use("/bookings", bookingRoute);
 app.use("/newsletter", newsletterRoute);
 

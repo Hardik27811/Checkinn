@@ -74,7 +74,7 @@ useEffect(() => {
       } else {
         // No destination → show all hotels (fallback)
         res = await axios.get(
-          "https://checkinn-rh1m.onrender.com/hotels",
+          "https://checkinn-rh1m.onrender.com/hotels/hotels",
           { withCredentials: true }
         );
       }
@@ -109,7 +109,7 @@ useEffect(() => {
 
 useEffect(()=>{
     const fetchHotelLocations = async ()=>{
-        const res = await fetch("https://checkinn-rh1m.onrender.com/hotels") 
+        const res = await fetch("https://checkinn-rh1m.onrender.com/hotels/hotels") 
         const result = await res.json();
         setHotelLocations(result.hotels)
     }

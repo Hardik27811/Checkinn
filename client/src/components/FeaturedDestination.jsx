@@ -11,7 +11,7 @@ function FeaturedDestination() {
     useEffect(()=>{
         try {
             const fetchHotel = async ()=>{
-                const res = await axios.get("https://checkinn-rh1m.onrender.com/hotels",{
+                const res = await axios.get("https://checkinn-rh1m.onrender.com/hotels/hotels",{
                     withCredentials : true
                 })
                 setHotel(res.data.hotels)

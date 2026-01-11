@@ -27,7 +27,7 @@ function RoomDetails() {
         try {
             const fetchrooms = async () => {
 
-                const res1 = await axios.get("https://checkinn-rh1m.onrender.com/hotels", {
+                const res1 = await axios.get("https://checkinn-rh1m.onrender.com/hotels/hotels", {
                     withCredentials: true
                 })
                 const hotel = res1.data.hotels;
