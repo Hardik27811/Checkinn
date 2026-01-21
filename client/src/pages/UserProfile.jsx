@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../services/api";
 import { format } from "date-fns";
 import { useUser } from "../context/UserContext";
 
@@ -16,7 +16,7 @@ const UserProfile = () => {
     email: "",
     phone: "",
   });
-  console.log(user);
+  // console.log(user);
   const timestamp = user?.iat;
   const date = new Date(timestamp * 1000);
   const formatted = format(date, "MMMM do, yyyy 'at' h:mm:ss a 'UTC'");
@@ -27,7 +27,7 @@ const UserProfile = () => {
        
 
         // Fetch users bookings
-        const bookingsRes = await axios.get("https://checkinn-rh1m.onrender.com/booking", {
+        const bookingsRes = await api.get("/bookings/booking", {
           withCredentials: true,
         });
         setBookings(bookingsRes.data.bookings || []);
@@ -43,7 +43,7 @@ const UserProfile = () => {
     fetchUserProfile();
   }, []);
 
-  console.log(bookings);
+  // console.log(bookings);
 
 
 
@@ -52,8 +52,8 @@ const UserProfile = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(
-        "https://checkinn-rh1m.onrender.com/api/user/profile",
+      await api.put(
+        "/api/user/profile",
         formData,
         { withCredentials: true }
       );
@@ -127,9 +127,9 @@ const UserProfile = () => {
             </div>
           </div>
 
-          {/* Right Side - Details & Bookings */}
+        
           <div className="lg:col-span-2 space-y-8">
-            {/* Personal Information */}
+
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="text-xl font-semibold mb-4">Personal Information</h3>
               {editing ? (
@@ -189,7 +189,7 @@ const UserProfile = () => {
               )}
             </div>
 
-            {/* Booking History */}
+   
             {role === 'user' && <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="text-xl font-semibold mb-4">Booking History</h3>
               {bookings.length === 0 ? (

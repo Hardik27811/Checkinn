@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import api from '../../services/api'
 
 const AdminLayout = () => {
   const [admin, setAdmin] = useState("");
@@ -15,7 +16,7 @@ const AdminLayout = () => {
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await axios.get("https://checkinn-rh1m.onrender.com/admin/admin-details", {
+        const res = await api.get("/admin/admin-details", {
           withCredentials: true,
         });
         if (res) setAdmin(res.data[0]);
@@ -34,8 +35,8 @@ const AdminLayout = () => {
   const handleAddOwner = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "https://checkinn-rh1m.onrender.com/admin/add-owner",
+      const res = await api.post(
+        "/admin/add-owner",
         formData,
         { withCredentials: true }
       );

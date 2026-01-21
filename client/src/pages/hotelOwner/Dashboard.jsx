@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../components/Title";
 import { assets, dashboardDummyData } from "../../assets/assets";
-import axios from "axios";
+import api from '../../services/api';
 import { useUser } from "../../context/UserContext";
 import { useDropzone } from "react-dropzone";
 
@@ -34,13 +34,13 @@ const Dashboard = () => {
   useEffect(() => {
     const hotelDetail = async () => {
       try {
-        const bookingsRes = await axios.get("https://checkinn-rh1m.onrender.com/booking", {
+        const bookingsRes = await api.get("/bookings/booking", {
           withCredentials: true,
         });
-        console.log(bookingsRes.data.bookings );
+        // console.log(bookingsRes.data.bookings );
         
         setBookings(bookingsRes.data.bookings || []);
-        const res = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
+        const res = await api.get("/owner/dashboard", {
           withCredentials: true,
         });
         setHotelInfo(res.data);
@@ -84,8 +84,8 @@ const Dashboard = () => {
         newFormData.append("images", file);
       });
 
-      const res = await axios.post(
-        "https://checkinn-rh1m.onrender.com/owner/add-hotel",
+      const res = await api.post(
+        "/owner/add-hotel",
         newFormData,
         {
           withCredentials: true,
@@ -101,7 +101,7 @@ const Dashboard = () => {
         roomsAvailable: "",
       });
       // Refresh hotel data
-      const updated = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
+      const updated = await api.get("owner/dashboard", {
         withCredentials: true,
       });
       setHotelInfo(updated.data);

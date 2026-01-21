@@ -4,6 +4,8 @@ import { assets } from '../assets/assets'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../services/api'
+
 function Hero() {
 
 
@@ -21,27 +23,23 @@ function Hero() {
 
   const navigate = useNavigate();
 
+const handleSearch = async (e) => {
+  e.preventDefault();
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  if (!destination) return alert("Please select a destination");
 
-    navigate("/rooms", {
-      state: {
-        destination,
-        checkIn,
-        checkOut,
-        guests
-      }
-    })
-  };
+  navigate(`/rooms?destination=${destination}&checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`);
+};
+
 
 
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const res = await fetch("https://checkinn-rh1m.onrender.com/hotels/hotels")
-        const result = await res.json();
-        setHotel(result.hotels)
+        const res = await api.get("/hotel/hotels")
+        // console.log(res.data.hotels);
+        
+        setHotel(res.data.hotels)
       } catch (error) {
 
       }
@@ -61,22 +59,6 @@ function Hero() {
   // console.log(availableLocations);
 
 
-
-
-  // useEffect(() => {
-  //   const fetchdata = async () => {
-  //     try {
-  //       const res = await axios.get('https://checkinn-rh1m.onrender.com/auth/user')
-  //       if (res.status === 200) {
-  //         console.log("data fetch sucessfullu");
-
-  //       }
-  //     } catch (error) {
-  //       console.error(error)
-  //     }
-  //   }
-  //   fetchdata()
-  // }, [])
 
 
 

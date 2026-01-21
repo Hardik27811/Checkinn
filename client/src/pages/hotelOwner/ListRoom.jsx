@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { roomsDummyData } from '../../assets/assets'
 import Title from '../../components/Title'
 import { useUser } from '../../context/UserContext'
-import axios from 'axios'
+import api from '../../services/api'
 const ListRoom = () => {
     
     const [rooms,setRooms] = useState(roomsDummyData)
@@ -12,7 +12,7 @@ const ListRoom = () => {
   useEffect(() => {
     const hotelDetail = async () => {
       try {
-        const res = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
+        const res = await api.get("/owner/dashboard", {
           withCredentials: true,
         });
         setHotelInfo(res.data);
@@ -23,7 +23,7 @@ const ListRoom = () => {
     };
     hotelDetail();
   }, []);
- console.log(hotelInfo[0]?.rooms);
+//  console.log(hotelInfo[0]?.rooms);
  
   
     
@@ -72,7 +72,7 @@ const ListRoom = () => {
                             <td className='py-3 px-4 text-gray-700 border-t border-gray-300 text-sm text-center read-only: text-red-500'>
                                 <label htmlFor="checkbox" className='relative inline-flex items-center cursor-pointer
                                 text-gray-900 gap-3'>
-                                    <input type="checkbox" className='sr-only peer' checked={item.isAvailable} />
+                                    <input type="checkbox" readOnly className='sr-only peer' checked={item.isAvailable} />
                                     <div className='w-12 h-7 bg-state-300 rounded-full peer peer-checked:bg-blue-600
                                     transition-colors duration-200'></div>
                                     <span className='dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full 

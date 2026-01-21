@@ -3,21 +3,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useUser } from "../context/UserContext";
 
-// const BookIcon = () => (
-//   <svg className="w-4 h-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-//     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
-//   </svg>
-// );
+
 
 const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Hotels", path: "/rooms" },
+    { name: "Hotels", path: '/hotels' },
+    { name: "Rooms", path: "/rooms" },
     { name: "Experience", path: "/experience" },
     { name: "About", path: "/about" },
   ];
 
-  const { user, role, logout} = useUser();
+  const { user, role, logout } = useUser();
 
 
 
@@ -54,14 +51,27 @@ const Navbar = () => {
         : "py-4 md:py-6"
         }`}
     >
-      {/* Logo */}
-      <Link to="/" 
-      className="flex">
-        <img src={assets.newlogopic} className="h-9 " alt="" />
+      {/* Logo Container */}
+      <Link
+        to="/"
+        className="flex items-center gap-2 transition-opacity hover:opacity-90"
+      >
+        {/* Icon Part  */}
+        <img
+          src={assets.newlogopic}
+          alt="Icon"
+          className="h-7 w-auto sm:h-8 md:h-9 lg:h-10"
+        />
+
+        {/* Text Part  */}
         <img
           src={assets.newlogo}
-          alt="logo"
-          className={`h-9  md:h-7 sm:h-3 invert ${isScrolled ? "invert" : "opacity-80"}`}
+          alt="Logo Text"
+          className={`
+          w-auto transition-all duration-300
+          h-6 sm:h-7 md:h-8 lg:h-9 
+          ${isScrolled ? "invert" : "invert opacity-80"}
+    `}
         />
       </Link>
 
@@ -104,17 +114,17 @@ const Navbar = () => {
             className="relative"
             // onMouseEnter={() => setShowDropdown(true)}
             // onMouseLeave={() => setShowDropdown(false)}
-            onClick={()=> setShowDropdown(prev => !prev)}
+            onClick={() => setShowDropdown(prev => !prev)}
           >
             {/* Profile Box */}
             <div className={` ${!isScrolled ? "flex items-center gap-2  w-26 justify-center border-2 border-white rounded-full pr-3 pl-1 py-.75 mr-3 cursor-default" : "text-black flex justify-center items-center  w-26 gap-2 border-2 border-black rounded-full px-3 py-.75 mr-3 cursor-default"} `}>
-              
 
-              <p className={`text-lg  ${!isScrolled ? "text-white " : "text-black"}`}>{user?.firstName?.charAt(0).toUpperCase()+user?.firstName?.slice(1)}</p>
+
+              <p className={`text-lg  ${!isScrolled ? "text-white " : "text-black"}`}>{user?.firstName?.charAt(0).toUpperCase() + user?.firstName?.slice(1)}</p>
             </div>
             {/* Dropdown */}
-           
-          {showDropdown &&  <div className="
+
+            {showDropdown && <div className="
               absolute right-0  w-32 text-center
               bg-white shadow-lg rounded-xl py-3
               border border-gray-200
@@ -123,24 +133,24 @@ const Navbar = () => {
               mt-2
             ">
               <div className="px-4 py-2 -ml-7  hover:bg-gray-100 cursor-pointer gap-2 flex justify-center items-center   "
-               onClick={()=>{navigate("/user-profile");scrollTo(0,0);}}
+                onClick={() => { navigate("/user-profile"); scrollTo(0, 0); }}
               >
                 <img
-                src={`${user?.userImage}`}
-                alt="Profile"
-                className="w-7 h-7 rounded-full object-cover object-top border border-gray-300"
-               
-              />
+                  src={`${user?.userImage}`}
+                  alt="Profile"
+                  className="w-7 h-7 rounded-full object-cover object-top border border-gray-300"
+
+                />
                 Profile</div>
               {/* <p className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Settings</p> */}
-              <p onClick={()=>{logout(); navigate("/")}} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
+              <p onClick={() => { logout(); navigate("/") }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
             </div>}
-         
+
           </div>
 
         ) : (
           <button
-            onClick={() => {navigate('/login');scrollTo(0,0)}}
+            onClick={() => { navigate('/login'); scrollTo(0, 0) }}
             className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled
               ? "bg-black text-white hover:bg-gray-800"
               : "bg-white text-black hover:bg-gray-200"
@@ -182,33 +192,33 @@ const Navbar = () => {
           </Link>
         ))}
 
-      { user && <div className="
+        {user && <div className="
              
             ">
-              <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer gap-2 flex justify-center items-center  "
-               onClick={()=>{ navigate("/user-profile");  setIsMenuOpen(false);scrollTo(0,0) }}
-              >
-                <img
-                src={`${user?.userImage}`}
-                alt="Profile"
-                className="-ml-10 w-7 h-7 rounded-full object-cover object-top border border-gray-300"
-               
-              />
-                Profile</div>
-              {/* <p className="px-4 py-2 hover:bg-gray-100 cursor-pointer"  >Settings</p> */}
-              <p onClick={()=>logout()} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
-            </div>}
+          <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer gap-2 flex justify-center items-center  "
+            onClick={() => { navigate("/user-profile"); setIsMenuOpen(false); scrollTo(0, 0) }}
+          >
+            <img
+              src={`${user?.userImage}`}
+              alt="Profile"
+              className="-ml-10 w-7 h-7 rounded-full object-cover object-top border border-gray-300"
+
+            />
+            Profile</div>
+          {/* <p className="px-4 py-2 hover:bg-gray-100 cursor-pointer"  >Settings</p> */}
+          <p onClick={() => logout()} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</p>
+        </div>}
 
         {user ? (
           <button
-            onClick={() => {navigate("/owner");scrollTo(0,0)}}
+            onClick={() => { navigate("/owner"); scrollTo(0, 0) }}
             className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all hidden lg:block `}
           >
             Dashboard
           </button>
         ) : (
           <button
-            onClick={() => {navigate("/login") ; setIsMenuOpen(false)}}
+            onClick={() => { navigate("/login"); setIsMenuOpen(false) }}
             className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500 mx-2"
           >
             Login

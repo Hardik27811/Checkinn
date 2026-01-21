@@ -1,6 +1,6 @@
 import {useEffect} from 'react'
 import { useState } from 'react'
-import axios from 'axios'
+import api from '../../services/api'
 import { useLocation,useNavigate } from 'react-router-dom';
 import { useUser  } from '../../context/UserContext';
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
   
     const userSignup = async () => {
         try {
-            const res = await axios.post("https://checkinn-rh1m.onrender.com/auth/user/signup", { firstName, lastName, email, password, phone })
+            const res = await api.post("auth/user/signup", { firstName, lastName, email, password, phone })
             if (res.status === 200) {
                 console.log("User registered", res);
                 
@@ -33,9 +33,9 @@ const Login = () => {
     }
     const userLogin = async ()=>{
         try {
-            const res = await axios.post("https://checkinn-rh1m.onrender.com/auth/user/login",{email,password},{ withCredentials: true }  )
+            const res = await api.post("/auth/user/login",{email,password},{ withCredentials: true }  )
             if(res.status   === 200){
-                console.log("User login",res);
+                // console.log("User login",res);
 
                  verifyUser();
                  setUser(res.data.user);

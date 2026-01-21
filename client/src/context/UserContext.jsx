@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import api from "../services/api";
 
 import axios from "axios";
-
 const UserContext = createContext();
 
 
@@ -16,31 +16,11 @@ export const UserProvider = ({ children }) => {
   //Always include cookies in requests
   axios.defaults.withCredentials = true;
 
-  // Verify user from backend using stored cookie
-  // const verifyUser = async () => {
-  //   try {
-  //     const res = await axios.get("https://checkinn-rh1m.onrender.com/auth/user/verify");
-  //     if (res.data?.user) {
-  //       setUser(res.data.user);
-  //       setRole(res.data.user.role || "user");
-  //     } else {
-  //       setUser(null);
-  //     }
-  //   } catch (err) {
-  //    if (err.response?.status === 401) {
-
-  //     setUser(null);
-  //   }  else {
-  //     console.error("Unexpected auth error:", err);
-  //   }
-  // }finally {
-  //     setLoading(false);
-  //   }
-  // };
+  
 
   const verifyUser = async () => {
   try {
-    const res = await axios.get("https://checkinn-rh1m.onrender.com/auth/user/verify");
+    const res = await api.get("auth/user/verify");
     setUser(res.data.user);
     setRole(res.data.user?.role || "user");
   } catch (err) {
@@ -62,7 +42,7 @@ export const UserProvider = ({ children }) => {
   // Logout function
   const logout = async () => {
     try {
-      await axios.post("https://checkinn-rh1m.onrender.com/auth/user/logout");
+      await api.post("/auth/user/logout");
       setUser(null);
       setRole("user");
       

@@ -4,6 +4,7 @@ import HotelCard from './HotelCard'
 import Title from './Title'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import api from '../services/api'
 
 function FeaturedDestination() {
     const navigate= useNavigate()
@@ -11,7 +12,7 @@ function FeaturedDestination() {
     useEffect(()=>{
         try {
             const fetchHotel = async ()=>{
-                const res = await axios.get("https://checkinn-rh1m.onrender.com/hotels/hotels",{
+                const res = await api.get("/hotel/hotels",{
                     withCredentials : true
                 })
                 setHotel(res.data.hotels)
@@ -51,7 +52,7 @@ function FeaturedDestination() {
 
       {/* Button */}
       <button 
-        onClick={()=>{navigate('/rooms'); scrollTo(0,0)}}
+        onClick={()=>{navigate(`/rooms`); scrollTo(0,0)}}
         className="mt-16 px-6 py-3 text-sm font-semibold 
         bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 
         hover:from-emerald-600 hover:via-teal-600 hover:to-sky-600 

@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 
 const connectToDB = require('./config/db');
 
-// Routes
+
 const authRoute = require("./routes/authRoutes");
 const ownerRoute = require('./routes/ownerRoutes');
 const adminRoute = require('./routes/adminRoutes');
@@ -19,15 +19,15 @@ const newsletterRoute = require('./routes/newsletter.routes');
 
 const app = express();
 
-// ================== DATABASE ==================
+
 connectToDB();
 
-// ================== MIDDLEWARE ==================
+
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "https://peppy-beijinho-3cb979.netlify.app",
-  "http://localhost:3000"
+
+  "http://localhost:5173"
 ];
 
 app.use(cors({
@@ -40,17 +40,17 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-// ================== HEALTH CHECK (IMPORTANT) ==================
+
 app.get("/healthCheck", (req, res) => {
   res.status(200).send("OK");
 });
 
-// ================== ROOT TEST ==================
+
 app.get("/", (req, res) => {
   res.send("Backend is working ");
 });
 
-// ================== ROUTES ==================
+
 app.use("/auth/user", authRoute);
 app.use("/owner", ownerRoute);
 app.use("/admin", adminRoute);
@@ -60,7 +60,7 @@ app.use("/hotel", hotelRoute);
 app.use("/bookings", bookingRoute);
 app.use("/newsletter", newsletterRoute);
 
-// ================== 404 HANDLER ==================
+
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -68,7 +68,7 @@ app.use((req, res) => {
   });
 });
 
-// ================== SERVER ==================
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

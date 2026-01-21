@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+
 import Title from "../../components/Title";
 import { useDropzone } from "react-dropzone";
+import api from '../../services/api'
 
 const AddRoom = () => {
   const [hotelId, setHotelId] = useState("");
@@ -45,7 +46,7 @@ const AddRoom = () => {
   useEffect(() => {
     const fetchHotel = async () => {
       try {
-        const res = await axios.get("https://checkinn-rh1m.onrender.com/owner/dashboard", {
+        const res = await api.get("/owner/dashboard", {
           withCredentials: true,
         });
         if (res.data.length > 0) {
@@ -81,8 +82,8 @@ const AddRoom = () => {
 
       files.forEach((file) => formData.append("images", file));
 
-      const res = await axios.post(
-        `https://checkinn-rh1m.onrender.com/owner/add-room/${hotelId}`,
+      const res = await api.post(
+        `/owner/add-room/${hotelId}`,
         formData,
         {
           withCredentials: true,

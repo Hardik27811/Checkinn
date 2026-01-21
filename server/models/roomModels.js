@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const hotelModels = require('./hotelModel');
+
 const roomSchema = new mongoose.Schema({
     roomType: {
         type: String,
