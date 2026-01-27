@@ -165,13 +165,13 @@ const handleBooking = async (e) => {
       >
         <div className="flex flex-wrap gap-6 text-gray-500">
           <input 
-          className="border-2 "
+          className="border-2 border-gray-400   p-2 rounded-xl"
           type="date" required onChange={e => setCheckIn(e.target.value)} />
           <input 
-          className="border-2 "
+          className="border-2  border-gray-400  p-2 rounded-xl"
           type="date" required onChange={e => setCheckOut(e.target.value)} />
           <input
-          className="border-2 "
+          className="border-2 border-gray-400 p-2 rounded-xl "
             type="number"
             min="1"
             required
