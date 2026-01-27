@@ -164,9 +164,14 @@ const handleBooking = async (e) => {
         className="mt-16 p-6 bg-white shadow-xl rounded-xl max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-6"
       >
         <div className="flex flex-wrap gap-6 text-gray-500">
-          <input type="date" required onChange={e => setCheckIn(e.target.value)} />
-          <input type="date" required onChange={e => setCheckOut(e.target.value)} />
+          <input 
+          className="border-2 "
+          type="date" required onChange={e => setCheckIn(e.target.value)} />
+          <input 
+          className="border-2 "
+          type="date" required onChange={e => setCheckOut(e.target.value)} />
           <input
+          className="border-2 "
             type="number"
             min="1"
             required
