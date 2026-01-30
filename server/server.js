@@ -27,7 +27,7 @@ app.use(cookieParser());
 
 const allowedOrigins = [
 
-  "https://checkinn-three.vercel.app"
+   "https://checkinn-three.vercel.app"
 ];
 
 app.use(cors({
